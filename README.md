@@ -31,7 +31,7 @@ Change the ```ValidateEmail``` setting in appsettings.json to toggle the app bet
 
 The login page includes buttons to test the features using data from the fake database.
 
-####References:
+#### References:
 
 1) https://vuetifyjs.com/en/
 1) https://github.com/logaretm/vee-validate
