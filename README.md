@@ -1,6 +1,6 @@
 # vue-core-jwt
 Sample SPA application using Vue CLI, Asp.Net Core 3 API, with JWT for authentication. Also uses Vuetify,
-Vee Validate, and includes a few other useful directives and utilities.
+Vee Validate, and includes a few other useful directives and utilities. This project does not use the Vue CLI Middleware package.
 
 Features include:
 * JWT tokens stored in a cookie with httponly
