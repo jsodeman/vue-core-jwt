@@ -1,0 +1,85 @@
+﻿@import "~@fortawesome/fontawesome-free/css/all.css";
+// ======== Custom styles go in here
+
+.clickable {
+	cursor: pointer;
+}
+
+// Helpers for Vuetify
+
+.v-btn.all-case {
+  text-transform: none;
+}
+
+h1 {
+  font-size: map-deep-get($headings, 'h1', 'size');
+  line-height: map-deep-get($headings, 'h1', 'line-height');
+  font-weight: map-deep-get($headings, 'h1', 'weight');
+  letter-spacing: map-deep-get($headings, 'h1', 'letter-spacing');
+}
+h2 {
+  font-size: map-deep-get($headings, 'h2', 'size');
+  line-height: map-deep-get($headings, 'h2', 'line-height');
+  font-weight: map-deep-get($headings, 'h2', 'weight');
+  letter-spacing: map-deep-get($headings, 'h2', 'letter-spacing');
+}
+h3 {
+  font-size: map-deep-get($headings, 'h3', 'size');
+  line-height: map-deep-get($headings, 'h3', 'line-height');
+  font-weight: map-deep-get($headings, 'h3', 'weight');
+  letter-spacing: map-deep-get($headings, 'h3', 'letter-spacing');
+}
+h4 {
+  font-size: map-deep-get($headings, 'h4', 'size');
+  line-height: map-deep-get($headings, 'h4', 'line-height');
+  font-weight: map-deep-get($headings, 'h4', 'weight');
+  letter-spacing: map-deep-get($headings, 'h4', 'letter-spacing');
+}
+h5 {
+  font-size: map-deep-get($headings, 'h5', 'size');
+  line-height: map-deep-get($headings, 'h5', 'line-height');
+  font-weight: map-deep-get($headings, 'h5', 'weight');
+  letter-spacing: map-deep-get($headings, 'h5', 'letter-spacing');
+}
+h6 {
+  font-size: map-deep-get($headings, 'h6', 'size');
+  line-height: map-deep-get($headings, 'h6', 'line-height');
+  font-weight: map-deep-get($headings, 'h6', 'weight');
+  letter-spacing: map-deep-get($headings, 'h6', 'letter-spacing');
+}
+
+.link--text {
+  color: $link;
+}
+
+// FORMS - required field indicators for labels
+
+.req:not(.v-input--radio-group) {
+  label::after {
+    content: "*";
+    color: $error !important;
+  }
+}
+
+.req.v-input--radio-group {
+  .v-input__prepend-outer::after {
+    content: "*";
+    color: $error !important;
+  }
+}
+
+.req-label::after {
+  content: "*";
+  color: $error !important;
+}
+
+// optional, moves the radio group labels up
+.v-input--radio-group--row {
+    flex-direction: column;
+    margin-top: 0;
+
+  .v-input__prepend-outer {
+    font-size: 12px;
+    margin-bottom: 8px;
+  }
+}

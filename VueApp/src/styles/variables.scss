@@ -1,0 +1,85 @@
+// Vuetify theme customizations, also defined in vuetify.js
+$primary: #00A7CB;
+$secondary: #162850;
+$secondary-light: lighten(#162850, 20%);
+$accent: #f8d277;
+$error: #FF5252;
+$info: #2196F3;
+$success: #4CAF50;
+$warning: #FFC107;
+$link: #00A7CB;
+//$navbar-height: 128px;
+$lightGrey: #f2f2f2;
+$darkGrey: #4f4f4f;
+
+// Fonts
+
+$body-font-family: Roboto, sans-serif !default;
+$font-size-root: 14px;
+$icon-size: 18px !default;
+$icon-size-dense: 16px !default;
+
+// Grid
+
+$grid-breakpoints: (
+	'xs': 0,
+	'sm': 600px,
+	'md': 960px,
+	'lg': 1280px,
+	'xl': 1920px
+);
+
+$container-max-widths: (
+	'md': 960px,
+	'lg': 1280px,
+	'xl': 1920px
+);
+
+// Type
+
+//$headings: (
+//	'h1': (
+//		'size': 36px,
+//		'line-height':2em,
+//		'weight': 700,
+//	),
+//	'h2': (
+//		'size': 24px,
+//		'line-height': 2em,
+//		'weight': 700,
+//	),
+//	'h3': (
+//		'size': 20px,
+//		'line-height': 2em,
+//		'weight': 700,
+//	),
+//	'h4': (
+//		'size': 16px,
+//		'line-height': 2em,
+//		'weight': 700,
+//	),
+//	'h5': (
+//		'size': 16px,
+//		'line-height': 2em,
+//		'weight': 700,
+//	),
+//	'h6': (
+//		'size': 16px,
+//		'line-height': 2em,
+//		'weight': 400,
+//	)
+//);
+
+// https://github.com/vuetifyjs/vuetify/blob/master/packages/vuetify/src/styles/settings/_light.scss
+
+$material-light: (
+	'text': (
+		'primary': $darkGrey
+	),
+	'text-color': $darkGrey,
+	'primary-text-percent': 1.0
+);
+
+// Tables
+//$data-table-regular-header-font-size: $font-size-root;
+//$data-table-regular-row-font-size: $font-size-root;

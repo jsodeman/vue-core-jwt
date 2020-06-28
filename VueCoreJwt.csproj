@@ -1,0 +1,49 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <SpaRoot>VueApp\</SpaRoot>
+    <DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.5" />
+    <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.2.0" />
+    <PackageReference Include="Serilog.AspNetCore" Version="3.2.0" />
+    <PackageReference Include="Serilog.Settings.Configuration" Version="3.1.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="VueApp" />
+    <Folder Include="VueApp\dist" />
+  </ItemGroup>
+
+    <ItemGroup>
+        <Content Include="$(SpaRoot)dist\**\*" />
+        <Content Update="$(SpaRoot)dist\**\*">
+            <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Update="web.Development.config">
+            <DependentUpon>web.config</DependentUpon>
+            <IsTransformFile>true</IsTransformFile>
+        </Content>
+        <Content Update="web.config">
+            <TransformOnBuild>false</TransformOnBuild>
+        </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Update="appsettings.Development.json">
+            <DependentUpon>appsettings.json</DependentUpon>
+            <IsTransformFile>true</IsTransformFile>
+        </Content>
+        <Content Update="appsettings.json">
+            <TransformOnBuild>false</TransformOnBuild>
+        </Content>
+    </ItemGroup>
+</Project>
