@@ -8,7 +8,7 @@ import vuetify from "@/plugins/vuetify";
 import api from "@/api";
 import router from "@/router/router";
 import store from "@/store";
-import { actionTypes } from "@/store-types";
+import { actionTypes, commitTypes } from "@/store-types";
 import App from "@/App.vue";
 import "@/styles/vueapp.scss";
 
@@ -47,6 +47,8 @@ store.dispatch(actionTypes.APP_LOAD)
 
 			// private route, users that aren't signed in go to login
 			if (!store.state.signedIn) {
+				// store the path they were trying to go so we can send them there after login
+				store.commit(commitTypes.SET_REDIRECT, { name: to.name, params: to.params });
 				next({ name: "account-login" });
 				return;
 			}

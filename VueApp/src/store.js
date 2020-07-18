@@ -23,6 +23,7 @@ export default new Vuex.Store({
 			someServiceApiKey: null,
 			validateEmail: false,
 		},
+		loginRedirect: null,
 	},
 	mutations: {
 		[commitTypes.SET_USER](state, user) {
@@ -31,6 +32,9 @@ export default new Vuex.Store({
 		},
 		[commitTypes.SET_SETTINGS](state, config) {
 			state.config = config;
+		},
+		[commitTypes.SET_REDIRECT](state, val) {
+			state.loginRedirect = val;
 		},
 	},
 	actions: {
@@ -46,13 +50,18 @@ export default new Vuex.Store({
 					});
 			});
 		},
-		[actionTypes.SAVE_LOGIN]({ commit }, authInfo) {
+		[actionTypes.SAVE_LOGIN]({ commit, state }, authInfo) {
 			return new Promise((resolve) => {
-				// optional redirect for first time users
+				// if the user was trying to get to a path send them along
 				// otherwise set to whatever landing page you like based on their role
-				let redirect = { name: "home" };
+				// optional redirect for first time users
+				// TODO: customize for your needs
+
+				let redirect = state.loginRedirect ? state.loginRedirect : { name: "home", params: {} };
+				commit(commitTypes.SET_REDIRECT, null);
+
 				if (authInfo.firstLogin) {
-					redirect = { name: "account-register-complete" };
+					redirect = { name: "account-register-complete", params: {} };
 				}
 
 				commit(commitTypes.SET_USER, authInfo);

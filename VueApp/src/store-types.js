@@ -8,6 +8,7 @@ export const actionTypes = {
 export const commitTypes = {
 	SET_USER: "setUser",
 	SET_SETTINGS: "setSettings",
+	SET_REDIRECT: "setRedirect",
 };
 
 export const getterTypes = {

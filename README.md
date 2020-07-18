@@ -125,3 +125,12 @@ conflicts.
 1) https://weblog.west-wind.com/posts/2017/Apr/27/IIS-and-ASPNET-Core-Rewrite-Rules-for-Static-Files-and-Html-5-Routing
 1) https://github.com/neonbones/Boilerplate.AuthDemo
 1) https://gist.github.com/jonasraoni/9dea65e270495158393f54e36ee6b78d
+
+## Change Log
+
+### 2020-07-18
+
+- Replaced the global mixin with a separate class for as-needed use
+- Use a default User object in the store for easier resetting
+- Added documentation
+- Send a user to their original route after login if they were redirected to the login page

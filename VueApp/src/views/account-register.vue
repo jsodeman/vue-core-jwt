@@ -93,11 +93,13 @@ export default {
 				.then(
 					({ data }) => {
 						this.posting = false;
+						// if email validation is required
 						if (this.$store.state.config.validateEmail) {
 							this.emailSent = true;
 							return;
 						}
 
+						// no email val required, log use in and send to the next page
 						this.$store.dispatch(actionTypes.SAVE_LOGIN, data)
 							.then((redirect) => {
 								this.$router.push(redirect);
