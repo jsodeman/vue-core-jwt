@@ -8,6 +8,7 @@ namespace VueCoreJwt.Controllers
 	{
 		private AppUser _currentUser;
 
+		// CurrentUser is hydrated from the information in the JWT token
 		public AppUser CurrentUser
 		{
 			get

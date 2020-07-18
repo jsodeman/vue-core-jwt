@@ -29,36 +29,39 @@ namespace VueCoreJwt.App
 			return salt;
 		}
 
-		// generates a GUID for password resetting
+		// generates a GUID for password resetting, email confirmation, etc
 		public static string GeneratePasswordResetIdentifier()
 		{
 			return Guid.NewGuid().ToString("N");
 		}
 
-		public static string GenerateRandomPassword()
-		{
-			return GetRandomString(8);
-		}
+		// the following is not used in this application but maybe useful for other pw reset flows
+		// can be replaced with https://www.nuget.org/packages/Bogus/
 
-		private static string GetRandomString(int length)
-		{
-			var chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890".ToCharArray();
-			var data = new byte[1];
-			using (var crypto = new RNGCryptoServiceProvider())
-			{
-				crypto.GetNonZeroBytes(data);
-				data = new byte[length];
-				crypto.GetNonZeroBytes(data);
-			}
-
-			var result = new StringBuilder(length);
-			foreach (var b in data)
-			{
-				result.Append(chars[b % (chars.Length)]);
-			}
-
-			return result.ToString();
-		}
+		// public static string GenerateRandomPassword()
+		// {
+		// 	return GetRandomString(8);
+		// }
+		//
+		// private static string GetRandomString(int length)
+		// {
+		// 	var chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890".ToCharArray();
+		// 	var data = new byte[1];
+		// 	using (var crypto = new RNGCryptoServiceProvider())
+		// 	{
+		// 		crypto.GetNonZeroBytes(data);
+		// 		data = new byte[length];
+		// 		crypto.GetNonZeroBytes(data);
+		// 	}
+		//
+		// 	var result = new StringBuilder(length);
+		// 	foreach (var b in data)
+		// 	{
+		// 		result.Append(chars[b % (chars.Length)]);
+		// 	}
+		//
+		// 	return result.ToString();
+		// }
 
 	}
 }

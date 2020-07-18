@@ -12,9 +12,11 @@ Features include:
 * Vee Validate
 * Vuex store with user information
 * Vue mixin passes common features through app
-* Navigation guards for 3 levels of users: public, normal, admin
+* Navigation guards for 3 levels of users: public, normal, admin (change to anything you like)
 * Core API endpoint base classes for public or secure controllers
 * ```CurrentUser``` available in secure controllers
+
+**Both the API and Vue application are marked with ```// TODO:``` comments in places where you should customize the code for your own needs.** 
 
 Uses a fake database and email service. There are a few demo values passed around as boilerplate for passing your own, like
 an api key sent to the client for use with 3rd party services.
@@ -30,6 +32,7 @@ Change the ```ValidateEmail``` setting in appsettings.json to toggle the app bet
 2) instantly approving the account and logging the new user in 
 
 The login page includes buttons to test the features using data from the fake database.
+
 
 ## Computer setup
 
@@ -132,5 +135,7 @@ conflicts.
 
 - Replaced the global mixin with a separate class for as-needed use
 - Use a default User object in the store for easier resetting
-- Added documentation
+- Added a lot of documentation
+- Added ```TODO:``` comments everywhere you might want to customize code for your needs
 - Send a user to their original route after login if they were redirected to the login page
+- Moved the cookie name into appsetting.json

@@ -4,6 +4,9 @@ using System.Linq;
 using VueCoreJwt.App;
 using VueCoreJwt.Models;
 
+// this is a fake database used for demo purposes
+// TODO: delete or replace based on your DB choice
+
 namespace VueCoreJwt.Data
 {
 	public class Database : IDatabase

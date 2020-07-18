@@ -14,6 +14,9 @@ import Home from "@/views/home.vue";
 import Restricted from "@/views/restricted.vue";
 import Admin from "@/views/admin.vue";
 
+// the access property defined which roles are allowed to access a route
+// * = anyone/public, or the access property can just be left off
+// multiple allowed roles per route can be provided in the array
 export default [
 	// root
 	{

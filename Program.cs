@@ -11,6 +11,7 @@ namespace VueCoreJwt
 	{
 		public static void Main(string[] args)
 		{
+			// the AppConfig object isn't available yet so we have to get the settings from the source
 			var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 
 			var configuration = new ConfigurationBuilder()
@@ -18,6 +19,8 @@ namespace VueCoreJwt
 				.AddJsonFile($"appsettings.{environment}.json", optional: true)
 				.Build();
 
+			// TODO: adjust the logging levels and desired (also in appsettings.config)
+			// TODO: change the sink to use a database or other option
 			if (environment == "Development")
 			{
 				Log.Logger = new LoggerConfiguration()
@@ -62,6 +65,7 @@ namespace VueCoreJwt
 						.AddEnvironmentVariables();
 
 				})
+				// add logging
 				.UseSerilog()
 				.ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); })
 		;

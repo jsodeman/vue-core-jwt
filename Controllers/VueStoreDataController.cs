@@ -1,9 +1,9 @@
-﻿using System;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using VueCoreJwt.Models;
 
 namespace VueCoreJwt.Controllers
 {
+	// first endpoint called by Vue to get any startup data
 	[Route("api/[controller]")]
 	[ApiController]
 	public class VueStoreDataController : BaseApiController
@@ -18,6 +18,7 @@ namespace VueCoreJwt.Controllers
 		[HttpGet]
 		public ActionResult<VueStoreData> Get()
 		{
+			// TODO: customize for your needs
 			return new VueStoreData
 			{
 				SomeServiceApiKey = config.SomeServiceApiKey,
@@ -26,6 +27,7 @@ namespace VueCoreJwt.Controllers
 		}
 	}
 
+	// TODO: customize for your needs
 	// anything public you want passed from the server to the Vue app when it starts
 	// lists, clientside keys, urls, config info, etc
 	public class VueStoreData

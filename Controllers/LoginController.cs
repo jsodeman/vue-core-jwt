@@ -30,6 +30,7 @@ namespace VueCoreJwt.Controllers
 				return new NotFoundObjectResult("Account not found");
 			}
 
+			// check the login against stored values
 			var auth = user.PasswordHash == Security.HashPassword(request.Password, user.Salt);
 
 			if (!auth)
@@ -39,6 +40,7 @@ namespace VueCoreJwt.Controllers
 
 			if (config.ValidateEmail && !user.Active)
 			{
+				// if using the email validated registration flow then reject users that haven't confirmed
 				return new BadRequestObjectResult("Email has not been confirmed");
 			}
 
@@ -49,7 +51,8 @@ namespace VueCoreJwt.Controllers
 
 			var response = new AuthResponse (config, user, firstLogin);
 
-			HttpContext.Response.Cookies.Append(".AspNetCore.Application.Id", response.Token, new CookieOptions { MaxAge = TimeSpan.FromMinutes(60) });
+			// set the auth cookie and send back the user info
+			HttpContext.Response.Cookies.Append(config.CookieName, response.Token, new CookieOptions { MaxAge = TimeSpan.FromMinutes(60) });
 
 			return response;
 		}
@@ -57,7 +60,7 @@ namespace VueCoreJwt.Controllers
 		[HttpDelete]
 		public ActionResult Logout()
 		{
-			HttpContext.Response.Cookies.Delete(".AspNetCore.Application.Id");
+			HttpContext.Response.Cookies.Delete(config.CookieName);
 
 			return Ok();
 		}

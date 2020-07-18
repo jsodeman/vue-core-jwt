@@ -2,7 +2,9 @@
 
 namespace VueCoreJwt.Models
 {
-	// Items from AppUser that aren't secret and useful clientside
+	// Items from AppUser that aren't secret and useful client-side
+	// This data is sent to Vue upon login or refresh
+	// TODO: customize for your needs
 	public class AuthResponse
 	{
 		public AuthResponse(AppConfig configuration, AppUser user, bool firstLogin)

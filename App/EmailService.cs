@@ -3,6 +3,7 @@ using Serilog;
 using VueCoreJwt.Interfaces;
 using VueCoreJwt.Models;
 
+// TODO: customize for your needs and integrate with PostmarkApp, Sendgrid, etc
 namespace VueCoreJwt.App
 {
 	public class EmailService : IEmailService
@@ -22,8 +23,7 @@ namespace VueCoreJwt.App
 			{
 				Log.Information($"Registration Confirmation Link: {activationLink}");
 			}
-			// TODO replace the line below
-			// TODO send an email to the user with the link
+			// TODO: send an email to the user with the link
 			// config.EmailServiceApiKey
 			return Task.CompletedTask;
 		}
@@ -36,8 +36,7 @@ namespace VueCoreJwt.App
 			{
 				Log.Information($"Password Reset Link: {resetLink}");
 			}
-			// TODO replace the line below
-			// TODO send an email to the user with the link
+			// TODO: send an email to the user with the link
 			// config.EmailServiceApiKey
 
 			return Task.CompletedTask;

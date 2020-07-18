@@ -3,6 +3,7 @@ using Serilog;
 
 namespace VueCoreJwt.Controllers
 {
+	// stores errors sent from client-side in your Serilog sink of choice
 	[Route("api/[controller]")]
 	[ApiController]
 	public class ClientLogController : BaseApiController

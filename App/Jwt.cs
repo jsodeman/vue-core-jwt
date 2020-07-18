@@ -19,10 +19,14 @@ namespace VueCoreJwt.App
 			{
 				Subject = new ClaimsIdentity(new Claim[]
 				{
+					// TODO: customize for your needs
+					// these should match AppUser.cs
+					// common types are list at https://docs.microsoft.com/en-us/dotnet/api/System.Security.Claims.ClaimTypes?view=netcore-3.0
 					new Claim(ClaimTypes.Name, user.Name),
 					new Claim(ClaimTypes.Email, user.Email),
 					new Claim(ClaimTypes.Sid, user.Id.ToString()),
 					new Claim(ClaimTypes.Role, user.Role),
+					// example of using a custom claim type
 					new Claim("CustomInfo", user.CustomInfo  ?? ""),
 
 				}),

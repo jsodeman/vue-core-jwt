@@ -7,6 +7,7 @@ using VueCoreJwt.Models;
 namespace VueCoreJwt.Controllers
 {
 	// checks to see if the JWT token passed with the request is good and still valid
+	// sets a fresh cookie and returns the latest user info
 	[Route("api/[controller]")]
 	[ApiController]
 	public class JwtCheckController : SecureApiController
@@ -25,15 +26,20 @@ namespace VueCoreJwt.Controllers
 		{
 			var user = db.GetUserById(CurrentUser.Id);
 
+			// TODO: customize for your needs
+			// if you wanted to check a token invalidation list then you would do it here
+
 			if (user == null)
 			{
-				HttpContext.Response.Cookies.Delete(".AspNetCore.Application.Id");
+				// if the user isn't found then clear the cookie
+				HttpContext.Response.Cookies.Delete(config.CookieName);
 				return new UnauthorizedResult();
 			}
 
 			if (config.ValidateEmail && !user.Active)
 			{
-				HttpContext.Response.Cookies.Delete(".AspNetCore.Application.Id");
+				// if using the email validated registration flow then reject users that haven't confirmed
+				HttpContext.Response.Cookies.Delete(config.CookieName);
 				return new BadRequestObjectResult("Email has not been confirmed");
 			}
 
@@ -42,8 +48,10 @@ namespace VueCoreJwt.Controllers
 
 			var response = new AuthResponse(config, user, false);
 
-			HttpContext.Response.Cookies.Append(".AspNetCore.Application.Id", response.Token, new CookieOptions { MaxAge = TimeSpan.FromMinutes(60) });
+			// set a fresh cookie
+			HttpContext.Response.Cookies.Append(config.CookieName, response.Token, new CookieOptions { MaxAge = TimeSpan.FromMinutes(60) });
 
+			// return the latest user info
 			return response;
 		}
 	}

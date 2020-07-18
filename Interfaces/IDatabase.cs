@@ -1,5 +1,6 @@
 ﻿using VueCoreJwt.Models;
 
+// TODO: replace with your DB
 namespace VueCoreJwt.Data
 {
 	public interface IDatabase

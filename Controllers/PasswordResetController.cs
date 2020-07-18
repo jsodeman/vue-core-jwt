@@ -33,6 +33,8 @@ namespace VueCoreJwt.Controllers
                 return new NotFoundObjectResult("Account not found");
             }
 
+            // send an email with a link back to the app containing a verification token
+            // TODO: if it matters you could store and check a time for the reset request to restrict the reset to a time window
             user.EmailToken = Security.GeneratePasswordResetIdentifier();
             db.UpdateUser(user);
 
@@ -67,8 +69,8 @@ namespace VueCoreJwt.Controllers
 
             var response = new AuthResponse(config, user, firstLogin);
 
-            HttpContext.Response.Cookies.Append(".AspNetCore.Application.Id", response.Token, new CookieOptions { MaxAge = TimeSpan.FromMinutes(60) });
-
+            HttpContext.Response.Cookies.Append(config.CookieName, response.Token, new CookieOptions { MaxAge = TimeSpan.FromMinutes(60) });
+			// set the new cookie and return the user info
             return response;
         }
 	}

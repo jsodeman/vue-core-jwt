@@ -27,14 +27,15 @@ namespace VueCoreJwt
 			Env = env;
 		}
 
-		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
+			// register and fill the config class
 			var config = new AppConfig();
-			config.IsDevelopment = Env.IsDevelopment();
 			Configuration.Bind("App", config);
+			config.IsDevelopment = Env.IsDevelopment();
 			services.AddSingleton(config);
 
+			// use JWT authentication
 			services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 				.AddJwtBearer(options =>
 				{
@@ -51,20 +52,7 @@ namespace VueCoreJwt
 					};
 				});
 
-
-			// services.AddAuthentication(options =>
-			// {
-			// 	options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-			// 	options.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
-			// 	options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-			// }).AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
-			// {
-			// 	options.RequireHttpsMetadata = true;
-			// 	options.SaveToken = true;
-			// 	options.TokenValidationParameters = new TokenValidationParameters
-			// 	{
-			// 		//  .  }; });
-
+			// while in dev allow calls to the API from the Vue dev server running on a different URL
 			services.AddCors(options =>
 			{
 				options.AddPolicy("_vueDev",
@@ -79,15 +67,16 @@ namespace VueCoreJwt
 
 			services.AddControllers();
 
+			// TODO: replace with your database and email service
 			services.AddScoped<IDatabase, Database>(ctx => new Database());
 			services.AddTransient<IEmailService, EmailService>();
 		}
 
-		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
 		{
 			if (env.IsDevelopment())
 			{
+				// only allow the CORS access in development
 				app.UseCors("_vueDev");
 				app.UseDeveloperExceptionPage();
 			}else
@@ -96,8 +85,11 @@ namespace VueCoreJwt
 			}
 
 			app.UseHttpsRedirection();
+			// this serves the production files from /dist
+			// TODO: see web.config for information or to change redirects
 			app.UseStaticFiles();
 
+			// security restrictions on the cookie
 			app.UseCookiePolicy(new CookiePolicyOptions
 			{
 				MinimumSameSitePolicy = env.IsDevelopment() ? SameSiteMode.Lax : SameSiteMode.Strict,
@@ -105,10 +97,12 @@ namespace VueCoreJwt
 				Secure = CookieSecurePolicy.Always
 			});
 
+			// log API requests
 			app.UseSerilogRequestLogging();
 
 			app.UseRouting();
 
+			// middleware to insert the JWT from the cookie into the request header
 			// https://geeks-world.github.io/articles/468401/index.html
 			app.UseSecureJwt();
 

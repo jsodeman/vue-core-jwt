@@ -27,7 +27,6 @@ namespace VueCoreJwt.Controllers
 		[HttpPost]
 		public async Task<ActionResult<AuthResponse>> Register(RegisterRequest request)
 		{
-
 			var existingUser = db.GetUserByEmail(request.Email);
 
 			if (existingUser != null)
@@ -39,6 +38,7 @@ namespace VueCoreJwt.Controllers
 			var hash = Security.HashPassword(request.Password, salt);
 			var token = Security.GeneratePasswordResetIdentifier();
 
+			// TODO: customize for your needs
 			var user = new AppUser
 			{
 				Email = request.Email.Trim(),
@@ -53,15 +53,17 @@ namespace VueCoreJwt.Controllers
 
 			user.Id = db.AddUser(user);
 
+			// if not using the email validated registration flow then set the auth cookie and return the user info
 			if (!config.ValidateEmail)
 			{
 				var response = new AuthResponse(config, user, true);
 
-				HttpContext.Response.Cookies.Append(".AspNetCore.Application.Id", response.Token, new CookieOptions { MaxAge = TimeSpan.FromMinutes(60) });
+				HttpContext.Response.Cookies.Append(config.CookieName, response.Token, new CookieOptions { MaxAge = TimeSpan.FromMinutes(60) });
 
 				return response;
 			}
 
+			// else send a new user confirmation link
 			await emailService.Register(user);
 
 			return Ok();
@@ -91,7 +93,7 @@ namespace VueCoreJwt.Controllers
 
 			var response = new AuthResponse(config, user, true);
 
-			HttpContext.Response.Cookies.Append(".AspNetCore.Application.Id", response.Token, new CookieOptions { MaxAge = TimeSpan.FromMinutes(60) });
+			HttpContext.Response.Cookies.Append(config.CookieName, response.Token, new CookieOptions { MaxAge = TimeSpan.FromMinutes(60) });
 
 			return response;
 		}
