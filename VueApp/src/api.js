@@ -1,8 +1,10 @@
 import axios from "axios";
 
+// in dev the api runs on a different URL
 const basePath = process.env.NODE_ENV === "development" ? "https://localhost:5001/api/" : "/api/";
 axios.defaults.baseURL = basePath;
 
+// pass the auth cookies
 const requestInterceptor = (request) => {
 	request.withCredentials = true;
 	return request;

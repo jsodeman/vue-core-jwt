@@ -31,16 +31,6 @@ Change the ```ValidateEmail``` setting in appsettings.json to toggle the app bet
 
 The login page includes buttons to test the features using data from the fake database.
 
-#### References:
-
-1) https://vuetifyjs.com/en/
-1) https://github.com/logaretm/vee-validate
-1) https://github.com/Maronato/vue-toastification
-1) https://fontawesome.com/
-1) https://cli.vuejs.org/
-1) https://weblog.west-wind.com/posts/2017/Apr/27/IIS-and-ASPNET-Core-Rewrite-Rules-for-Static-Files-and-Html-5-Routing
-1) https://github.com/neonbones/Boilerplate.AuthDemo
-
 ## Computer setup
 
 Change the JwtKey and other values in ```appsettings.json``` and ```appsettings.Development.json```
@@ -54,6 +44,9 @@ Assumed you have the .Net framework already installed.
 Install the dotnet-watch utility. In a console run:
 
 ```dotnet tool install --global dotnet-watch --version 2.2.0```
+
+If your linter or IDE complains about the ```@/foo``` paths in the JS files then you can
+point the IDE to the webpack config file located in ```\VueApp\node_modules\@vue\cli-service\webpack.config.js```
 
 ## NPM Commands
 
@@ -90,7 +83,45 @@ npm run build
 cd VueApp
 npm run lint
 ```
+## Vue Application
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+#### Mixin
+```common-mixin.js``` includes some useful properties from the store and Vuetify. You can register this globally instead of
+importing as-needed but third-party components like Vuetify will also get these properties and you might end up with naming
+conflicts.
 
+- ```currentUser``` = the object representing the current user or null if not signed-in
+- ```signedIn``` = boolean of the user's sign-in state
+- ```mobile``` = boolean, true if the page is in a [mobile layout size](https://vuetifyjs.com/en/customization/breakpoints/#breakpoint-service-object) 
+
+#### Numeric Directives
+
+- ```v-decimal```
+- ```v-integer```
+
+#### Icon Font
+
+[Font Awesome](https://fontawesome.com/)
+
+#### Validation
+
+[Vee Validate](https://github.com/logaretm/vee-validate)
+
+#### UI Framework
+
+[Vuetify](https://vuetifyjs.com)
+
+#### Toast Notifications
+
+[Vue Toastification](https://github.com/Maronato/vue-toastification)
+
+## References
+
+1) https://vuetifyjs.com
+1) https://github.com/logaretm/vee-validate
+1) https://github.com/Maronato/vue-toastification
+1) https://fontawesome.com/
+1) https://cli.vuejs.org/
+1) https://weblog.west-wind.com/posts/2017/Apr/27/IIS-and-ASPNET-Core-Rewrite-Rules-for-Static-Files-and-Html-5-Routing
+1) https://github.com/neonbones/Boilerplate.AuthDemo
+1) https://gist.github.com/jonasraoni/9dea65e270495158393f54e36ee6b78d

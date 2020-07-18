@@ -14,8 +14,11 @@
 </template>
 
 <script>
+import commonMixin from "@/common-mixin";
+
 export default {
 	name: "home",
+	mixins: [commonMixin],
 	components: {},
 	props: {
 	},

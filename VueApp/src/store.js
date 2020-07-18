@@ -32,6 +32,7 @@ export default new Vuex.Store({
 		},
 	},
 	actions: {
+		// initial data load from the server: paths, config info, lists, keys, etc
 		[actionTypes.APP_LOAD]({ commit }) {
 			return new Promise((resolve, reject) => {
 				api.appSettings()
@@ -71,12 +72,16 @@ export default new Vuex.Store({
 
 			return api.logout();
 		},
+		// call the API to see if the JWT cookie exists and is good
+		// gets a fresh cookie back and the latest user info
 		[actionTypes.CHECK_TOKEN]({ dispatch }) {
 			return api.jwtCheck().then((r) => {
 				if (r.status === 200) {
+					// store the fresh user info
 					return dispatch(actionTypes.SAVE_LOGIN, r.data);
 				}
 
+				// check failed, clear the user, the nav guard will send them to login
 				return dispatch(actionTypes.CLEAR_LOGIN);
 			}).catch(() => dispatch(actionTypes.CLEAR_LOGIN));
 		},

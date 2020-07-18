@@ -14,64 +14,54 @@ import "@/styles/vueapp.scss";
 
 Vue.config.productionTip = false;
 
-// router
+// ******** router ********
 Vue.use(VueRouter);
 
-// validation
+// ******** validation ********
+// vee-validate common components
 Vue.component("ValidationProvider", ValidationProvider);
 Vue.component("ValidationObserver", ValidationObserver);
 
-// directives
+// ******** directives ********
+// v-integer and v-decimal
 Vue.use(NumericDirective);
 
-// components
+// ******** other components ********
 Vue.use(Toast, {
 	timeout: 2000,
 });
 
-Vue.mixin({
-	computed: {
-		currentUser() {
-			return this.$store.state.user;
-		},
-		signedIn() {
-			return this.$store.state.signedIn;
-		},
-		mobile() {
-			return this.$vuetify.breakpoint.mobile;
-		},
-	},
-});
-
-// load the initial app state from the API
-// check an existing token if there is already one
+// load any starting data the app needs from the server like paths, keys, lists
 store.dispatch(actionTypes.APP_LOAD)
+	// checks to see if a JWT cookie exists and validates it
 	.then(() => store.dispatch(actionTypes.CHECK_TOKEN))
 	.then(() => {
-		// use navigation guards to check auth before following route
+		// configure the router navigation guards to check auth before following routes on each navigation event
+		// roles are assigned to routes in routes.js
 		router.beforeEach((to, from, next) => {
-			// public routes
+			// public routes, no access value set or it's set to *
 			if (!Object.prototype.hasOwnProperty.call(to.meta, "access") || to.meta.access.includes("*")) {
 				next();
 				return;
 			}
 
-			// users that aren't signed in
+			// private route, users that aren't signed in go to login
 			if (!store.state.signedIn) {
 				next({ name: "account-login" });
 				return;
 			}
 
-			// incorrect roles
+			// user doesn't have the correct role
 			if (!to.meta.access.includes(store.state.user.role)) {
 				next({ name: "denied" });
 				return;
 			}
 
-			// correct roles
+			// correct roles, continue
 			next();
 		});
 
+		// create the main Vue instance
 		new Vue({
 			router,
 			store,
@@ -80,6 +70,7 @@ store.dispatch(actionTypes.APP_LOAD)
 		}).$mount("#app");
 
 		// GLOBAL ERROR LOGGING AND HANDLING
+		// this sends client-side errors to the server for logging in the database
 
 		// don't send errors to the API in development
 		if (process.env.NODE_ENV === "development") {

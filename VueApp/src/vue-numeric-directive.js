@@ -1,4 +1,5 @@
 /* eslint-disable */
+// https://gist.github.com/jonasraoni/9dea65e270495158393f54e36ee6b78d
 //+ Jonas Raoni Soares Silva
 //@ http://raoni.org
 

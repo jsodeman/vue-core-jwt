@@ -62,7 +62,6 @@
 			</template>
 		</v-app-bar>
 		<v-main>
-<!--			<v-progress-linear :active="showLoading" indeterminate />-->
 			<v-container>
 				<router-view></router-view>
 			</v-container>
@@ -70,10 +69,12 @@
 	</v-app>
 </template>
 <script>
+import commonMixin from "@/common-mixin";
 import { actionTypes } from "./store-types";
 
 export default {
 	name: "app",
+	mixins: [commonMixin],
 	data() {
 		return {
 			drawer: false,
@@ -83,13 +84,11 @@ export default {
 	},
 	watch: {
 		$route() {
+			// update the page title when the route changes
 			document.title = this.$route.meta.title;
 		},
 	},
 	computed: {
-		// message() { return this.$store.state.message; },
-		// showMessage() { return this.message && this.message !== ""; },
-		// showLoading() { return this.isLoading; },
 	},
 	methods: {
 		logout() {

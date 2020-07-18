@@ -2,6 +2,8 @@ import { extend } from "vee-validate";
 // eslint-disable-next-line camelcase
 import { required, email, min_value, min } from "vee-validate/dist/rules";
 
+// See https://github.com/logaretm/vee-validate
+
 extend("required", {
 	...required,
 	message: "Required",
