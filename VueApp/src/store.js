@@ -5,17 +5,19 @@ import api from "./api";
 
 Vue.use(Vuex);
 
+const defaultUser = () => ({
+	id: null,
+	email: null,
+	role: null,
+	name: null,
+	customInfo: null,
+	token: null,
+	firstLogin: false,
+});
+
 export default new Vuex.Store({
 	state: {
-		user: {
-			id: null,
-			email: null,
-			role: null,
-			name: null,
-			customInfo: null,
-			token: null,
-			firstLogin: false,
-		},
+		user: defaultUser(),
 		signedIn: false,
 		config: {
 			someServiceApiKey: null,
@@ -24,7 +26,7 @@ export default new Vuex.Store({
 	},
 	mutations: {
 		[commitTypes.SET_USER](state, user) {
-			state.user = user;
+			Object.assign(state.user, user);
 			state.signedIn = user.token !== null;
 		},
 		[commitTypes.SET_SETTINGS](state, config) {
@@ -59,16 +61,7 @@ export default new Vuex.Store({
 			});
 		},
 		[actionTypes.CLEAR_LOGIN]({ commit }) {
-			const user = {
-				id: null,
-				email: null,
-				role: null,
-				name: null,
-				customInfo: null,
-				token: null,
-				firstLogin: false,
-			};
-			commit(commitTypes.SET_USER, user);
+			commit(commitTypes.SET_USER, defaultUser());
 
 			return api.logout();
 		},
