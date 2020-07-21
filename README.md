@@ -131,6 +131,10 @@ conflicts.
 
 ## Change Log
 
+### 2020-07-21
+
+- Edited the project file to hide the dist folder but still publish it
+
 ### 2020-07-18
 
 - Replaced the global mixin with a separate class for as-needed use
