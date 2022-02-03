@@ -4,6 +4,11 @@ module.exports = {
 	},
 	css: {
 		sourceMap: true,
+		loaderOptions: {
+			sass: {
+				implementation: require("sass"),
+			},
+		},
 	},
 	configureWebpack: {
 		devtool: "eval-source-map",
