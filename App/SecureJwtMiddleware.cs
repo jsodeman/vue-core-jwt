@@ -4,7 +4,6 @@ using VueCoreJwt.Models;
 
 namespace VueCoreJwt.App
 {
-	// https://github.com/neonbones/Boilerplate.AuthDemo/blob/master/AuthDemo.Identity.Jwt/Middleware/SecureJwtMiddleware.cs
 	// this takes the JWT from the cookie and passes it along the pipeline in the Authorization header where you'd
 	// normally find a JWT
 	public class SecureJwtMiddleware

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Serilog;
 using VueCoreJwt.Models;
 
 namespace VueCoreJwt.Controllers

@@ -1,9 +1,19 @@
 using System;
-using Microsoft.AspNetCore.Hosting;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.CookiePolicy;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using Serilog.Events;
+using VueCoreJwt.App;
+using VueCoreJwt.Data;
+using VueCoreJwt.Interfaces;
+using VueCoreJwt.Models;
 
 namespace VueCoreJwt
 {
@@ -11,36 +21,124 @@ namespace VueCoreJwt
 	{
 		public static void Main(string[] args)
 		{
-			// the AppConfig object isn't available yet so we have to get the settings from the source
-			var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+			var builder = WebApplication.CreateBuilder(args);
 
-			var configuration = new ConfigurationBuilder()
-				.AddJsonFile("appsettings.json")
-				.AddJsonFile($"appsettings.{environment}.json", optional: true)
-				.Build();
+			var env = builder.Environment;
 
+			if (env.IsDevelopment())
+			{
+				// allow the CORS access in development for use by the vue dev server
+				builder.Services.AddCors(options =>
+				{
+					options.AddPolicy("_vueDev",
+						builder =>
+						{
+							builder.WithOrigins("http://localhost:8080")
+								.AllowCredentials()
+								.AllowAnyHeader()
+								.AllowAnyMethod();
+						});
+				});
+			}
+
+			// register the AppConfig class for DI
+			var config = new AppConfig();
+			builder.Configuration.Bind("App", config);
+			config.IsDevelopment = env.IsDevelopment();
+			builder.Services.AddSingleton(config);
+
+			// use JWT authentication
+			builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+				.AddJwtBearer(options =>
+				{
+					options.RequireHttpsMetadata = true;
+					options.SaveToken = true;
+					options.TokenValidationParameters = new TokenValidationParameters
+					{
+						ValidateAudience = true,
+						ValidateIssuer = true,
+						ValidateIssuerSigningKey = true,
+						IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(config.JwtKey)),
+						ValidIssuer = config.SiteUrl,
+						ValidAudience = config.SiteUrl
+					};
+				});
+
+			builder.Services.AddAuthorization();
+
+			builder.Services.AddControllers();
+
+			// TODO: replace with your database and email service
+			builder.Services.AddScoped<IDatabase, Database>(ctx => new Database());
+			builder.Services.AddTransient<IEmailService, EmailService>();
+
+			// configure Serilog
 			// TODO: adjust the logging levels and desired (also in appsettings.config)
 			// TODO: change the sink to use a database or other option
-			if (environment == "Development")
+			builder.Host.UseSerilog((hostingContext, config) =>
 			{
-				Log.Logger = new LoggerConfiguration()
-					.MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Debug)
-					.Enrich.FromLogContext()
-					.WriteTo.Console()
-					.CreateLogger();
-			}
-			else
+				if (env.IsDevelopment())
+				{
+					config
+						.MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Debug)
+						.Enrich.FromLogContext()
+						.WriteTo.Console()
+						;
+				}
+				else
+				{
+					config
+						.MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Error)
+						.Enrich.FromLogContext()
+						.ReadFrom.Configuration(builder.Configuration)
+						;
+				}
+			});
+
+			var app = builder.Build();
+
+			if (env.IsDevelopment())
 			{
-				Log.Logger = new LoggerConfiguration()
-					.MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Error)
-					.Enrich.FromLogContext()
-					.ReadFrom.Configuration(configuration)
-					.CreateLogger();
+				app.UseDeveloperExceptionPage();
+			}else
+			{
+				app.UseHsts();
 			}
+
+			app.UseHttpsRedirection();
+
+			// this serves the production files from /dist
+			// TODO: see web.config for information or to change redirects
+			app.UseStaticFiles();
+
+			if (env.IsDevelopment())
+			{
+				app.UseCors("_vueDev");
+			}
+
+			// security restrictions on the cookie
+			app.UseCookiePolicy(new CookiePolicyOptions
+			{
+				MinimumSameSitePolicy = env.IsDevelopment() ? SameSiteMode.Lax : SameSiteMode.Strict,
+				HttpOnly = HttpOnlyPolicy.Always,
+				Secure = CookieSecurePolicy.Always
+			});
+
+			// middleware to insert the JWT from the cookie into the request header
+			app.UseSecureJwt();
+
+			app.UseAuthentication();
+
+			app.UseAuthorization();
+
+			app.MapControllers();
+
+			// log API requests
+			app.UseSerilogRequestLogging();
 
 			try
 			{
-				CreateHostBuilder(args).Build().Run();
+				app.Run();
 			}
 			catch (Exception ex)
 			{
@@ -51,23 +149,5 @@ namespace VueCoreJwt
 				Log.CloseAndFlush();
 			}
 		}
-
-		public static IHostBuilder CreateHostBuilder(string[] args) =>
-			Host.CreateDefaultBuilder(args)
-				.ConfigureAppConfiguration((hostingContext, config) =>
-				{
-					config.Sources.Clear();
-
-					var env = hostingContext.HostingEnvironment;
-
-					config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-						.AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, true)
-						.AddEnvironmentVariables();
-
-				})
-				// add logging
-				.UseSerilog()
-				.ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); })
-		;
 	}
 }
